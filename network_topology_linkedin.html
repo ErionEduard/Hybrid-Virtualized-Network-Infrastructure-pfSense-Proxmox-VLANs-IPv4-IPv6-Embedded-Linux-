@@ -1,0 +1,340 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .wrap {
+    font-family: var(--font-mono);
+    padding: 1.5rem 0;
+    max-width: 680px;
+  }
+
+  .node {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 14px;
+    width: 100%;
+    position: relative;
+  }
+
+  .node-title {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .node-body {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+  }
+
+  .node-body .addr { color: var(--color-text-primary); }
+  .node-body .iface { color: var(--color-text-tertiary); }
+
+  .pill {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    vertical-align: middle;
+  }
+
+  .pill-blue  { background: #E6F1FB; color: #185FA5; }
+  .pill-teal  { background: #E1F5EE; color: #0F6E56; }
+  .pill-amber { background: #FAEEDA; color: #854F0B; }
+  .pill-purple{ background: #EEEDFE; color: #534AB7; }
+  .pill-gray  { background: #F1EFE8; color: #5F5E5A; }
+
+  @media (prefers-color-scheme: dark) {
+    .pill-blue  { background: #0C447C; color: #B5D4F4; }
+    .pill-teal  { background: #085041; color: #9FE1CB; }
+    .pill-amber { background: #633806; color: #FAC775; }
+    .pill-purple{ background: #3C3489; color: #CECBF6; }
+    .pill-gray  { background: #444441; color: #D3D1C7; }
+  }
+
+  .node.b-blue   { border-color: #85B7EB; }
+  .node.b-teal   { border-color: #5DCAA5; }
+  .node.b-amber  { border-color: #EF9F27; }
+  .node.b-purple { border-color: #AFA9EC; }
+  .node.b-gray   { border-color: #B4B2A9; }
+  .node.b-dashed { border-style: dashed; }
+
+  @media (prefers-color-scheme: dark) {
+    .node.b-blue   { border-color: #378ADD; }
+    .node.b-teal   { border-color: #1D9E75; }
+    .node.b-amber  { border-color: #BA7517; }
+    .node.b-purple { border-color: #7F77DD; }
+    .node.b-gray   { border-color: #888780; }
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .vline {
+    width: 1px;
+    height: 24px;
+    background: var(--color-border-secondary);
+  }
+
+  .vline-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .vline-label .lbl {
+    font-size: 10px;
+    font-family: var(--font-sans);
+    color: var(--color-text-tertiary);
+    background: var(--color-background-primary);
+    padding: 0 6px;
+    margin: -7px 0;
+    position: relative;
+    z-index: 1;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .split {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .split-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .divider-v {
+    width: 0.5px;
+    background: var(--color-border-tertiary);
+    align-self: stretch;
+    margin-top: 12px;
+  }
+
+  .row-label {
+    font-size: 10px;
+    font-family: var(--font-sans);
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    align-self: flex-start;
+  }
+
+  .iface-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+
+  .iface-table td {
+    padding: 2px 4px;
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .iface-table td:first-child {
+    white-space: nowrap;
+    color: var(--color-text-tertiary);
+    padding-right: 8px;
+    font-size: 10px;
+  }
+
+  .sep {
+    width: 100%;
+    height: 0.5px;
+    background: var(--color-border-tertiary);
+    margin: 8px 0;
+  }
+
+  .feature-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-family: var(--font-sans);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--color-background-success);
+    color: var(--color-text-success);
+    border: 0.5px solid var(--color-border-success);
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="col">
+
+    <!-- INTERNET -->
+    <div class="node b-gray" style="max-width:320px">
+      <div class="node-title">
+        <i class="ti ti-world" aria-hidden="true" style="font-size:15px"></i>
+        Internet — ISP
+      </div>
+      <div class="node-body">IPv4 + IPv6 dual-stack &nbsp;·&nbsp; fibre</div>
+    </div>
+
+    <div class="vline"></div>
+
+    <!-- ONT -->
+    <div class="node b-gray" style="max-width:320px">
+      <div class="node-title">
+        <i class="ti ti-topology-star" aria-hidden="true" style="font-size:15px"></i>
+        ONT
+      </div>
+      <div class="node-body">Fibre termination</div>
+    </div>
+
+    <div class="vline"></div>
+
+    <!-- CPE -->
+    <div class="node b-amber" style="max-width:360px">
+      <div class="node-title">
+        <i class="ti ti-router" aria-hidden="true" style="font-size:15px"></i>
+        Upstream CPE router
+        <span class="pill pill-amber">192.168.30.1</span>
+      </div>
+      <div class="node-body">
+        IPv4 NAT + DHCP &nbsp;·&nbsp; IPv6 RA → pfSense WAN
+      </div>
+    </div>
+
+    <div class="vline-label">
+      <div class="vline" style="height:16px"></div>
+      <div class="lbl">192.168.30.x/24</div>
+      <div class="vline" style="height:16px"></div>
+    </div>
+
+    <!-- PROXMOX -->
+    <div class="node b-gray" style="max-width:520px">
+      <div class="node-title">
+        <i class="ti ti-server" aria-hidden="true" style="font-size:15px"></i>
+        Proxmox host
+        <span class="pill pill-gray">laptop hardware</span>
+      </div>
+      <div class="node-body">
+        <table class="iface-table">
+          <tr>
+            <td>eth1 → vmbr1</td>
+            <td>USB ethernet · WAN uplink &nbsp;<span class="addr">192.168.30.2</span></td>
+          </tr>
+          <tr>
+            <td>eth0 → vmbr0</td>
+            <td>Built-in NIC · LAN (VLAN-aware bridge) &nbsp;<span class="addr">192.168.40.2</span></td>
+          </tr>
+          <tr>
+            <td>USB serial</td>
+            <td>UART → legacy DSL router (picocom)</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="vline-label">
+      <div class="vline" style="height:16px"></div>
+      <div class="lbl">vmbr1 → vtnet1 &nbsp;·&nbsp; vmbr0 → vtnet0</div>
+      <div class="vline" style="height:16px"></div>
+    </div>
+
+    <!-- PFSENSE -->
+    <div class="node b-blue" style="max-width:580px">
+      <div class="node-title">
+        <i class="ti ti-shield-check" aria-hidden="true" style="font-size:15px"></i>
+        pfSense VM
+        <span class="pill pill-blue">gateway · firewall · NTP · DNS</span>
+      </div>
+      <div class="node-body">
+        <table class="iface-table">
+          <tr>
+            <td>vtnet1 WAN</td>
+            <td><span class="addr">192.168.30.3/24</span> &nbsp;·&nbsp; IPv6 GUA (RA from CPE)</td>
+          </tr>
+          <tr>
+            <td>vtnet0 LAN</td>
+            <td><span class="pill pill-blue" style="font-size:9px">VLAN40</span> &nbsp;<span class="addr">192.168.40.3/24</span> &nbsp;·&nbsp; <span class="addr">fd00:192:168:40::1/64</span></td>
+          </tr>
+          <tr>
+            <td>vtnet0.50</td>
+            <td><span class="pill pill-teal" style="font-size:9px">VLAN50</span> &nbsp;<span class="addr">192.168.50.1/24</span> &nbsp;·&nbsp; <span class="addr">fd00:192:168:50::1/64</span></td>
+          </tr>
+          <tr>
+            <td>tun_wg0</td>
+            <td><span class="pill pill-purple" style="font-size:9px">WG0 · VLAN40</span> &nbsp;<span class="addr">10.0.40.1/24</span> &nbsp;·&nbsp; <span class="addr">fd00:10:0:40::1/64</span></td>
+          </tr>
+          <tr>
+            <td>tun_wg1</td>
+            <td><span class="pill pill-purple" style="font-size:9px">WG1 · VLAN50</span> &nbsp;<span class="addr">10.0.50.1/24</span> &nbsp;·&nbsp; <span class="addr">fd00:10:0:50::1/64</span></td>
+          </tr>
+        </table>
+        <div class="sep"></div>
+        <div class="feature-row">
+          <span class="badge">NAT4 + NAT6 per VLAN</span>
+          <span class="badge">IPv4 DHCP per VLAN</span>
+          <span class="badge">IPv6 RA per VLAN</span>
+          <span class="badge">AdGuard DNS over WG</span>
+          <span class="badge">NTP server</span>
+          <span class="badge">WireGuard dual-stack</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vline-label">
+      <div class="vline" style="height:16px"></div>
+      <div class="lbl">LAN trunk — VLAN40 + VLAN50 tagged</div>
+      <div class="vline" style="height:16px"></div>
+    </div>
+
+    <!-- DLINK -->
+    <div class="node b-amber b-dashed" style="max-width:520px">
+      <div class="node-title">
+        <i class="ti ti-switch-horizontal" aria-hidden="true" style="font-size:15px"></i>
+        Legacy DSL router — repurposed managed switch
+        <span class="pill pill-amber">192.168.40.1</span>
+      </div>
+      <div class="node-body">
+        <table class="iface-table">
+          <tr>
+            <td>Port 1</td>
+            <td>Trunk ← pfSense LAN &nbsp;·&nbsp; <span class="pill pill-blue" style="font-size:9px">VLAN40</span> <span class="pill pill-teal" style="font-size:9px">VLAN50</span> tagged</td>
+          </tr>
+          <tr>
+            <td>Port 2</td>
+            <td><span class="pill pill-teal" style="font-size:9px">VLAN50</span> access — untagged clients</td>
+          </tr>
+          <tr>
+            <td>NTP</td>
+            <td>→ 192.168.40.3 (pfSense LAN)</td>
+          </tr>
+          <tr>
+            <td>UART</td>
+            <td>Managed via Proxmox USB serial</td>
+          </tr>
+          <tr>
+            <td>NVRAM</td>
+            <td>DHCPv6 + RA suppressed via TR-069 tree override</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
